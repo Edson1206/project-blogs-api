@@ -5,7 +5,7 @@ const validateLogin = async ({ email, password }) => {
   const user = await User.findOne({ where: { email } });
 
   if (!user || user.password !== password) {
-    return { type: 'INVALID_FIELDS', message: 'Invalid fields' };
+    return { type: 400, message: 'Invalid fields' };
   }
 
   const { password: _, ...userInfo } = user.dataValues;
