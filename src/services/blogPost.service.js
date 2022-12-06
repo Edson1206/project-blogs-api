@@ -38,7 +38,14 @@ const findAllBlogPosts = async () => {
   return allBlogPosts;
 };
 
+const findBlogPostById = async (id) => BlogPost.findByPk(id, {
+  include: [
+    { model: User, as: 'user', attributes: { exclude: ['password'] } },
+    { model: Category, as: 'categories', through: { attributes: [] } }],
+});
+
 module.exports = {
   createBlogPost,
   findAllBlogPosts,
+  findBlogPostById,
 };
