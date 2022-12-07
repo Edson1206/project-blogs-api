@@ -9,5 +9,6 @@ router.post('/', userFieldsSchema, userController.createUser);
 router.use(getAuthorization);
 router.get('/', userController.getAllUsers);
 router.get('/:id', userController.getUserById);
+router.delete('/me', userController.deleteUserById);
 
 module.exports = router;
