@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { Category, BlogPost, PostCategory, User } = require('../models');
 
 const createBlogPost = async (req) => {
@@ -26,13 +27,9 @@ const createBlogPost = async (req) => {
 
 const findAllBlogPosts = async () => {
   const allBlogPosts = await BlogPost.findAll({
-    include: [{
-      model: User, as: 'user', attributes: { exclude: ['password'] },
-    },
-    {
-      model: Category, as: 'categories', through: { attributes: [] },
-    },
-  ],
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } }],
   });
 
   return allBlogPosts;
@@ -48,10 +45,32 @@ const updateBlogPost = async (title, content, post) => post.update({ title, cont
 
 const deleteBlogPostById = async (id) => BlogPost.destroy({ where: { id } });
 
+const searchBlogPosts = async (search) => {
+  if (!search) {
+    const posts = await findAllBlogPosts();
+    return posts;
+  }
+
+  const blogPosts = BlogPost.findAll({
+     where: {
+      [Op.or]: [
+      { title: { [Op.like]: `%${search}%` } },
+      { content: { [Op.like]: `%${search}%` } },
+      ],
+    },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } }],
+  });
+  
+  return blogPosts;
+};
+
 module.exports = {
   createBlogPost,
   findAllBlogPosts,
   findBlogPostById,
   updateBlogPost,
   deleteBlogPostById,
+  searchBlogPosts,
 };
