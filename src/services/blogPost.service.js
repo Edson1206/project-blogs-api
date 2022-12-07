@@ -44,8 +44,11 @@ const findBlogPostById = async (id) => BlogPost.findByPk(id, {
     { model: Category, as: 'categories', through: { attributes: [] } }],
 });
 
+const updateBlogPost = async (title, content, post) => post.update({ title, content });
+
 module.exports = {
   createBlogPost,
   findAllBlogPosts,
   findBlogPostById,
+  updateBlogPost,
 };
