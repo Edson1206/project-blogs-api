@@ -46,9 +46,12 @@ const findBlogPostById = async (id) => BlogPost.findByPk(id, {
 
 const updateBlogPost = async (title, content, post) => post.update({ title, content });
 
+const deleteBlogPostById = async (id) => BlogPost.destroy({ where: { id } });
+
 module.exports = {
   createBlogPost,
   findAllBlogPosts,
   findBlogPostById,
   updateBlogPost,
+  deleteBlogPostById,
 };
